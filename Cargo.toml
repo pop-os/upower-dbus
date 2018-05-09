@@ -1,0 +1,13 @@
+[package]
+name = "upower_dbus"
+version = "0.1.0"
+authors = ["Michael Murphy <mmstickman@gmail.com>"]
+readme = "README.md"
+license = "MIT"
+description = "UPower info via Dbus"
+repository = "https://github.com/mmstick/upower-dbus"
+
+[dependencies]
+dbus = "0.6.1"
+failure = "0.1.1"
+failure_derive = "0.1.1"
