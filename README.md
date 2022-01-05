@@ -9,15 +9,27 @@ A Rust library which interfaces with UPower status information through dbus.
 ```rust
 extern crate upower_dbus;
 
-use upower_dbus::UPower;
+use futures::stream::StreamExt;
+use upower_dbus::UPowerProxy;
 
-fn main() {
-    match UPower::new(1000).and_then(|u| u.on_battery()) {
-        Ok(true) => println!("system is using battery"),
-        Ok(false) => println!("system is on AC"),
-        Err(why) => eprintln!("failed to get battery status: {}", why)
-    }
+fn main() -> zbus::Result<()> {
+    futures::executor::block_on(async move {
+        let connection = zbus::Connection::system().await?;
+
+        let upower = UPowerProxy::new(&connection).await?;
+
+        println!("On Battery: {:?}", upower.on_battery().await);
+
+        let mut stream = upower.receive_on_battery_changed().await;
+
+        while let Some(event) = stream.next().await {
+            println!("On Battery: {:?}", event.get().await);
+        }
+
+        Ok(())
+    })
 }
+
 ```
 
 ### Getting the current battery status as a percentage
@@ -25,33 +37,25 @@ fn main() {
 ```rust
 extern crate upower_dbus;
 
-use std::process::exit;
-use upower_dbus::UPower;
+use upower_dbus::{DeviceProxy, UPowerProxy};
 
-fn main() {
-    let upower = match UPower::new(1000) {
-        Ok(upower) => upower,
-        Err(why) => {
-            eprintln!("failed to get dbus connection: {}", why);
-            exit(1);
-        }
-    };
+fn main() -> zbus::Result<()> {
+    futures::executor::block_on(async move {
+        let connection = zbus::Connection::system().await?;
 
-    match upower.on_battery() {
-        Ok(true) => {
-            match upower.get_percentage() {
-                Ok(percentage) => println!("battery is at {}%", percentage),
-                Err(why) => {
-                    eprintln!("could not get battery percentage: {}", why);
-                    exit(1);
-                }
-            }
-        }
-        Ok(false) => println!("battery is not active"),
-        Err(why) => {
-            eprintln!("could not get battery status: {}", why);
-            exit(1);
-        }
-    }
+        let upower = UPowerProxy::new(&connection).await?;
+
+        let display_device = upower.get_display_device().await?;
+
+        let device = DeviceProxy::builder(&connection)
+            .path(display_device)?
+            .build()
+            .await?;
+
+        println!("Battery: {:?}", device.percentage().await);
+
+        Ok(())
+    })
 }
+
 ```

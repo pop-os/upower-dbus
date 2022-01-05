@@ -1,13 +1,20 @@
 [package]
 name = "upower_dbus"
-version = "0.1.0"
-authors = ["Michael Murphy <mmstickman@gmail.com>"]
+version = "0.2.0"
+authors = ["Michael Murphy <mmstick@pm.me>"]
+repository = "https://github.com/pop-os/upower-dbus"
+description = "UPower info via Zbus"
 readme = "README.md"
 license = "MIT"
-description = "UPower info via Dbus"
-repository = "https://github.com/mmstick/upower-dbus"
+categories = ["os::unix-apis"]
+keywords = ["linux", "systemd", "logind", "dbus", "zbus"]
+edition = "2018"
 
 [dependencies]
-dbus = "0.6.1"
-failure = "0.1.1"
-failure_derive = "0.1.1"
+serde = "1.0.133"
+serde_repr = "0.1.7"
+zbus = "2.0.0"
+zvariant = "3.0.0"
+
+[dev-dependencies]
+futures = "0.3.19"
