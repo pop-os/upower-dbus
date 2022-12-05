@@ -37,7 +37,7 @@ fn main() -> zbus::Result<()> {
 ```rust
 extern crate upower_dbus;
 
-use upower_dbus::{DeviceProxy, UPowerProxy};
+use upower_dbus::UPowerProxy;
 
 fn main() -> zbus::Result<()> {
     futures::executor::block_on(async move {
@@ -45,12 +45,7 @@ fn main() -> zbus::Result<()> {
 
         let upower = UPowerProxy::new(&connection).await?;
 
-        let display_device = upower.get_display_device().await?;
-
-        let device = DeviceProxy::builder(&connection)
-            .path(display_device)?
-            .build()
-            .await?;
+        let device = upower.get_display_device().await?;
 
         println!("Battery: {:?}", device.percentage().await);
 
