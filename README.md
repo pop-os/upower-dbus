@@ -6,7 +6,7 @@ A Rust library which interfaces with UPower status information through dbus.
 
 ### Detecting if the system is running on battery
 
-```rust
+```rust,no_run
 extern crate upower_dbus;
 
 use futures::stream::StreamExt;
@@ -34,7 +34,7 @@ fn main() -> zbus::Result<()> {
 
 ### Getting the current battery status as a percentage
 
-```rust
+```rust,no_run
 extern crate upower_dbus;
 
 use upower_dbus::UPowerProxy;
