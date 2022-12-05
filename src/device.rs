@@ -45,7 +45,8 @@ pub enum BatteryLevel {
 
 #[dbus_proxy(
     interface = "org.freedesktop.UPower.Device",
-    default_service = "org.freedesktop.UPower"
+    default_service = "org.freedesktop.UPower",
+    assume_defaults = false
 )]
 trait Device {
     #[dbus_proxy(property)]
