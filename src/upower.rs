@@ -3,6 +3,8 @@
 
 use zbus::dbus_proxy;
 
+use crate::device::{DeviceProxy, DeviceProxyBlocking};
+
 #[dbus_proxy(interface = "org.freedesktop.UPower", assume_defaults = true)]
 trait UPower {
     /// EnumerateDevices method
@@ -12,7 +14,8 @@ trait UPower {
     fn get_critical_action(&self) -> zbus::Result<String>;
 
     /// GetDisplayDevice method
-    fn get_display_device(&self) -> zbus::Result<zbus::zvariant::OwnedObjectPath>;
+    #[dbus_proxy(object = "Device")]
+    fn get_display_device(&self);
 
     /// DeviceAdded signal
     #[dbus_proxy(signal)]
