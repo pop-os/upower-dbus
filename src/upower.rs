@@ -3,7 +3,7 @@
 
 use zbus::dbus_proxy;
 
-#[dbus_proxy(interface = "org.freedesktop.UPower")]
+#[dbus_proxy(interface = "org.freedesktop.UPower", assume_defaults = true)]
 trait UPower {
     /// EnumerateDevices method
     fn enumerate_devices(&self) -> zbus::Result<Vec<zbus::zvariant::OwnedObjectPath>>;
