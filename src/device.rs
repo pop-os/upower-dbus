@@ -38,7 +38,7 @@ pub enum BatteryLevel {
     None = 1,
     Low = 3,
     Critical = 4,
-    Normal = 5,
+    Normal = 6,
     High = 7,
     Full = 8,
 }
